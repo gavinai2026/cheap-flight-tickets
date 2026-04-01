@@ -1,0 +1,42 @@
+import { Airline } from '../types';
+
+export const AIRLINES: Airline[] = [
+  { code: 'EK', name: 'Emirates', logo: 'emirates', alliance: undefined },
+  { code: 'QR', name: 'Qatar Airways', logo: 'qatar', alliance: 'oneworld' },
+  { code: 'SQ', name: 'Singapore Airlines', logo: 'singapore', alliance: 'Star Alliance' },
+  { code: 'CX', name: 'Cathay Pacific', logo: 'cathay', alliance: 'oneworld' },
+  { code: 'EY', name: 'Etihad Airways', logo: 'etihad', alliance: undefined },
+  { code: 'TK', name: 'Turkish Airlines', logo: 'turkish', alliance: 'Star Alliance' },
+  { code: 'LH', name: 'Lufthansa', logo: 'lufthansa', alliance: 'Star Alliance' },
+  { code: 'BA', name: 'British Airways', logo: 'ba', alliance: 'oneworld' },
+  { code: 'AF', name: 'Air France', logo: 'airfrance', alliance: 'SkyTeam' },
+  { code: 'KL', name: 'KLM Royal Dutch Airlines', logo: 'klm', alliance: 'SkyTeam' },
+  { code: 'AA', name: 'American Airlines', logo: 'american', alliance: 'oneworld' },
+  { code: 'UA', name: 'United Airlines', logo: 'united', alliance: 'Star Alliance' },
+  { code: 'DL', name: 'Delta Air Lines', logo: 'delta', alliance: 'SkyTeam' },
+  { code: 'QF', name: 'Qantas', logo: 'qantas', alliance: 'oneworld' },
+  { code: 'NH', name: 'ANA (All Nippon Airways)', logo: 'ana', alliance: 'Star Alliance' },
+  { code: 'JL', name: 'Japan Airlines', logo: 'jal', alliance: 'oneworld' },
+  { code: 'KE', name: 'Korean Air', logo: 'korean', alliance: 'SkyTeam' },
+  { code: 'OZ', name: 'Asiana Airlines', logo: 'asiana', alliance: 'Star Alliance' },
+  { code: 'AI', name: 'Air India', logo: 'airindia', alliance: 'Star Alliance' },
+  { code: 'ET', name: 'Ethiopian Airlines', logo: 'ethiopian', alliance: 'Star Alliance' },
+  { code: 'SA', name: 'South African Airways', logo: 'saa', alliance: 'Star Alliance' },
+  { code: 'LX', name: 'Swiss International Air Lines', logo: 'swiss', alliance: 'Star Alliance' },
+  { code: 'OS', name: 'Austrian Airlines', logo: 'austrian', alliance: 'Star Alliance' },
+  { code: 'AY', name: 'Finnair', logo: 'finnair', alliance: 'oneworld' },
+  { code: 'IB', name: 'Iberia', logo: 'iberia', alliance: 'oneworld' },
+  { code: 'VS', name: 'Virgin Atlantic', logo: 'virgin', alliance: 'SkyTeam' },
+  { code: 'AC', name: 'Air Canada', logo: 'aircanada', alliance: 'Star Alliance' },
+  { code: 'NZ', name: 'Air New Zealand', logo: 'airnz', alliance: 'Star Alliance' },
+  { code: 'MH', name: 'Malaysia Airlines', logo: 'malaysia', alliance: 'oneworld' },
+  { code: 'TG', name: 'Thai Airways', logo: 'thai', alliance: 'Star Alliance' },
+  { code: 'BR', name: 'EVA Air', logo: 'eva', alliance: 'Star Alliance' },
+  { code: 'CI', name: 'China Airlines', logo: 'china', alliance: 'SkyTeam' },
+  { code: 'CA', name: 'Air China', logo: 'airchina', alliance: 'Star Alliance' },
+  { code: 'LA', name: 'LATAM Airlines', logo: 'latam', alliance: undefined },
+  { code: 'AM', name: 'Aeromexico', logo: 'aeromexico', alliance: 'SkyTeam' },
+];
+
+export const getAirlineByCode = (code: string): Airline | undefined =>
+  AIRLINES.find((a) => a.code === code);

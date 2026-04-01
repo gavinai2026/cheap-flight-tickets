@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "PremiumFlights",
+    "slug": "premium-flights",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1A73E8"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.premiumflights.app",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "We use your location to find nearby airports."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1A73E8"
+      },
+      "package": "com.premiumflights.app",
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
+      "permissions": ["NOTIFICATIONS"]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-notifications"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "premium-flights"
+      }
+    }
+  }
+}
