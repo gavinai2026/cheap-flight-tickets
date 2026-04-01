@@ -8,6 +8,7 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { Share } from 'react-native';
 import { Flight } from '../types';
 import { useApp } from '../context/AppContext';
 import { Colors, Spacing, FontSizes, FontWeights, BorderRadius, Shadows } from '../constants/theme';
@@ -20,11 +21,33 @@ import {
   getDiscountPercent,
   getCabinClassLabel,
 } from '../utils/helpers';
+import { PriceTrendChart } from '../components/PriceTrendChart';
+import { PredictionBadge } from '../components/PredictionBadge';
+import { MilesEstimateView } from '../components/MilesEstimate';
+import { generatePriceHistory, predictPrice } from '../services/pricePrediction';
+import { calculateMiles } from '../services/milesCalculator';
 
 export const FlightDetailsScreen = ({ navigation, route }: any) => {
   const flight: Flight = route.params.flight;
   const { toggleFavorite, isFavorite, addPriceAlert, addSavedSearch } = useApp();
   const hasDiscount = flight.price < flight.originalPrice;
+
+  const priceHistory = generatePriceHistory(flight.price, 30);
+  const prediction = predictPrice(priceHistory, flight.price);
+  const milesEstimate = calculateMiles(
+    flight.segments[0].departureAirport,
+    flight.segments[flight.segments.length - 1].arrivalAirport,
+    flight.cabinClass,
+    flight.segments[0].airline.code
+  );
+
+  const handleShare = async () => {
+    const dep = flight.segments[0].departureAirport;
+    const arr = flight.segments[flight.segments.length - 1].arrivalAirport;
+    await Share.share({
+      message: `Check out this ${getCabinClassLabel(flight.cabinClass)} flight: ${dep.city} (${dep.code}) → ${arr.city} (${arr.code}) for ${formatPrice(flight.price)}! Found on PremiumFlights.`,
+    });
+  };
 
   const handleSetAlert = () => {
     Alert.alert(
@@ -43,13 +66,18 @@ export const FlightDetailsScreen = ({ navigation, route }: any) => {
           <Ionicons name="arrow-back" size={24} color={Colors.text} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Flight Details</Text>
-        <TouchableOpacity onPress={() => toggleFavorite(flight.id)}>
-          <Ionicons
-            name={isFavorite(flight.id) ? 'heart' : 'heart-outline'}
-            size={24}
-            color={isFavorite(flight.id) ? Colors.error : Colors.text}
-          />
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', gap: Spacing.md }}>
+          <TouchableOpacity onPress={handleShare}>
+            <Ionicons name="share-outline" size={24} color={Colors.text} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toggleFavorite(flight.id)}>
+            <Ionicons
+              name={isFavorite(flight.id) ? 'heart' : 'heart-outline'}
+              size={24}
+              color={isFavorite(flight.id) ? Colors.error : Colors.text}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
@@ -165,6 +193,57 @@ export const FlightDetailsScreen = ({ navigation, route }: any) => {
                 <Text style={styles.amenityText}>{amenity}</Text>
               </View>
             ))}
+          </View>
+        </View>
+
+        {/* Price Prediction */}
+        <View style={styles.amenitiesCard}>
+          <Text style={styles.cardTitle}>Price Trend</Text>
+          <PriceTrendChart priceHistory={priceHistory} currentPrice={flight.price} />
+          <View style={{ marginTop: Spacing.md }}>
+            <PredictionBadge prediction={prediction} />
+          </View>
+        </View>
+
+        {/* Miles Estimate */}
+        <View style={styles.amenitiesCard}>
+          <Text style={styles.cardTitle}>Miles & Points</Text>
+          <MilesEstimateView estimate={milesEstimate} />
+        </View>
+
+        {/* Quick Links */}
+        <View style={styles.amenitiesCard}>
+          <Text style={styles.cardTitle}>Travel Tools</Text>
+          <View style={{ gap: Spacing.sm }}>
+            <TouchableOpacity
+              style={styles.toolLink}
+              onPress={() => navigation.navigate('Lounge', {
+                airportCode: flight.segments[0].departureAirport.code,
+                airportName: flight.segments[0].departureAirport.name,
+              })}
+            >
+              <Ionicons name="wine-outline" size={20} color={Colors.premium} />
+              <Text style={styles.toolLinkText}>View Lounges at {flight.segments[0].departureAirport.code}</Text>
+              <Ionicons name="chevron-forward" size={16} color={Colors.textTertiary} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.toolLink}
+              onPress={() => navigation.navigate('VisaCheck', {
+                destinationCountry: flight.segments[flight.segments.length - 1].arrivalAirport.country || '',
+              })}
+            >
+              <Ionicons name="document-text-outline" size={20} color={Colors.info} />
+              <Text style={styles.toolLinkText}>Check Visa Requirements</Text>
+              <Ionicons name="chevron-forward" size={16} color={Colors.textTertiary} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.toolLink}
+              onPress={() => navigation.navigate('Compare')}
+            >
+              <Ionicons name="git-compare-outline" size={20} color={Colors.secondary} />
+              <Text style={styles.toolLinkText}>Compare Business vs First</Text>
+              <Ionicons name="chevron-forward" size={16} color={Colors.textTertiary} />
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -594,5 +673,19 @@ const styles = StyleSheet.create({
     fontSize: FontSizes.lg,
     fontWeight: FontWeights.bold,
     color: Colors.textInverse,
+  },
+  toolLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: Spacing.md,
+    backgroundColor: Colors.background,
+    borderRadius: BorderRadius.md,
+    gap: Spacing.sm,
+  },
+  toolLinkText: {
+    flex: 1,
+    fontSize: FontSizes.sm,
+    fontWeight: FontWeights.medium,
+    color: Colors.text,
   },
 });

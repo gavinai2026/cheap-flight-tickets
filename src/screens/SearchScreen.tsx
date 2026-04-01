@@ -278,21 +278,52 @@ export const SearchScreen = ({ navigation }: any) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.quickAction}
-            onPress={() => navigation.navigate('Alerts')}
+            onPress={() => navigation.navigate('FlightTracker')}
           >
-            <View style={[styles.quickActionIcon, { backgroundColor: Colors.warningLight }]}>
-              <Ionicons name="notifications" size={22} color={Colors.warning} />
+            <View style={[styles.quickActionIcon, { backgroundColor: Colors.successLight }]}>
+              <Ionicons name="locate" size={22} color={Colors.success} />
             </View>
-            <Text style={styles.quickActionText}>Price Alerts</Text>
+            <Text style={styles.quickActionText}>Track Flight</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.quickAction}
-            onPress={() => navigation.navigate('SavedTab')}
+            onPress={() => navigation.navigate('TripPlanner')}
+          >
+            <View style={[styles.quickActionIcon, { backgroundColor: Colors.warningLight }]}>
+              <Ionicons name="map" size={22} color={Colors.warning} />
+            </View>
+            <Text style={styles.quickActionText}>Trip Planner</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* More Tools */}
+        <View style={styles.quickActions}>
+          <TouchableOpacity
+            style={styles.quickAction}
+            onPress={() => navigation.navigate('Compare')}
+          >
+            <View style={[styles.quickActionIcon, { backgroundColor: Colors.primaryLight + '30' }]}>
+              <Ionicons name="git-compare" size={22} color={Colors.primary} />
+            </View>
+            <Text style={styles.quickActionText}>Compare</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.quickAction}
+            onPress={() => navigation.navigate('VisaCheck')}
+          >
+            <View style={[styles.quickActionIcon, { backgroundColor: Colors.infoLight }]}>
+              <Ionicons name="document-text" size={22} color={Colors.info} />
+            </View>
+            <Text style={styles.quickActionText}>Visa Check</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.quickAction}
+            onPress={() => navigation.navigate('Alerts')}
           >
             <View style={[styles.quickActionIcon, { backgroundColor: Colors.errorLight }]}>
-              <Ionicons name="heart" size={22} color={Colors.error} />
+              <Ionicons name="notifications" size={22} color={Colors.error} />
             </View>
-            <Text style={styles.quickActionText}>Saved</Text>
+            <Text style={styles.quickActionText}>Price Alerts</Text>
           </TouchableOpacity>
         </View>
 

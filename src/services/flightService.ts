@@ -2,6 +2,10 @@ import { Flight, SearchQuery, CalendarPrice, DealOfDay, FlightSegment, LayoverIn
 import { AIRPORTS } from '../constants/airports';
 import { AIRLINES } from '../constants/airlines';
 import { generateId, addDays } from '../utils/helpers';
+import { aggregateFlightSearch } from './flightAggregator';
+import { createLogger } from './logger';
+
+const log = createLogger('FlightService');
 
 const randomBetween = (min: number, max: number): number =>
   Math.floor(Math.random() * (max - min + 1)) + min;
@@ -132,7 +136,27 @@ const generateFlight = (query: SearchQuery, index: number): Flight => {
 };
 
 export const searchFlights = async (query: SearchQuery): Promise<Flight[]> => {
-  // Simulate API delay
+  // Try real APIs first, fall back to mock data
+  try {
+    log.info('Searching flights via aggregator', {
+      origin: query.origin?.code,
+      destination: query.destination?.code,
+      cabin: query.cabinClass,
+    });
+
+    const result = await aggregateFlightSearch(query);
+
+    if (result.flights.length > 0) {
+      log.info(`Found ${result.flights.length} real flights from: ${result.sources.join(', ')}`);
+      return result.flights;
+    }
+
+    log.info('No real API results, falling back to mock data');
+  } catch (error) {
+    log.warn('Aggregator failed, using mock data', { error: (error as Error).message });
+  }
+
+  // Fallback: generate mock data
   await new Promise((resolve) => setTimeout(resolve, 1500));
 
   const count = randomBetween(8, 20);

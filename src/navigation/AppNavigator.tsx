@@ -13,6 +13,11 @@ import { AlertsScreen } from '../screens/AlertsScreen';
 import { DealsScreen } from '../screens/DealsScreen';
 import { SavedScreen } from '../screens/SavedScreen';
 import { ProfileScreen } from '../screens/ProfileScreen';
+import { CompareScreen } from '../screens/CompareScreen';
+import { FlightTrackerScreen } from '../screens/FlightTrackerScreen';
+import { VisaCheckScreen } from '../screens/VisaCheckScreen';
+import { LoungeScreen } from '../screens/LoungeScreen';
+import { TripPlannerScreen } from '../screens/TripPlannerScreen';
 import { Colors, FontSizes, FontWeights } from '../constants/theme';
 
 const Stack = createNativeStackNavigator();
@@ -25,6 +30,11 @@ const SearchStack = () => (
     <Stack.Screen name="FlightDetails" component={FlightDetailsScreen} />
     <Stack.Screen name="Calendar" component={CalendarScreen} />
     <Stack.Screen name="Alerts" component={AlertsScreen} />
+    <Stack.Screen name="Compare" component={CompareScreen} />
+    <Stack.Screen name="FlightTracker" component={FlightTrackerScreen} />
+    <Stack.Screen name="VisaCheck" component={VisaCheckScreen} />
+    <Stack.Screen name="Lounge" component={LoungeScreen} />
+    <Stack.Screen name="TripPlanner" component={TripPlannerScreen} />
   </Stack.Navigator>
 );
 
