@@ -51,29 +51,14 @@
         "VIBRATE",
         "RECEIVE_BOOT_COMPLETED"
       ],
-      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
     "plugins": [
-      "expo-notifications",
-      [
-        "expo-updates",
-        {
-          "username": "premiumflights"
-        }
-      ]
+      "expo-notifications"
     ],
-    "updates": {
-      "url": "https://u.expo.dev/premium-flights",
-      "fallbackToCacheTimeout": 5000,
-      "checkAutomatically": "ON_LOAD"
-    },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
     "extra": {
       "eas": {
         "projectId": "premium-flights"
