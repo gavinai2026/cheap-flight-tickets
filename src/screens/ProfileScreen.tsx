@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useApp } from '../context/AppContext';
+import { useSubscription } from '../context/SubscriptionContext';
 import { Colors, Spacing, FontSizes, FontWeights, BorderRadius, Shadows } from '../constants/theme';
 
 interface SettingItemProps {
@@ -48,6 +49,7 @@ const CURRENCIES = ['USD', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD', 'CHF', 'SGD', 'AED
 export const ProfileScreen = ({ navigation }: any) => {
   const { state, updatePreferences } = useApp();
   const { preferences } = state;
+  const { isPremium, state: subState, toggleDevPremium, cancelSubscription } = useSubscription();
 
   const handleCurrencyChange = () => {
     const currentIndex = CURRENCIES.indexOf(preferences.currency);
@@ -80,6 +82,56 @@ export const ProfileScreen = ({ navigation }: any) => {
       </View>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        {/* Premium Section */}
+        {isPremium ? (
+          <View style={styles.premiumActiveCard}>
+            <View style={styles.premiumActiveHeader}>
+              <View style={styles.premiumIconCircle}>
+                <Ionicons name="diamond" size={24} color="#FFF" />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.premiumActiveTitle}>PremiumFlights Pro</Text>
+                <Text style={styles.premiumActiveSubtitle}>
+                  {subState.plan ? `${subState.plan.interval === 'yearly' ? 'Annual' : 'Monthly'} Plan` : 'Active'}
+                  {subState.expiresAt ? ` · Renews ${new Date(subState.expiresAt).toLocaleDateString()}` : ''}
+                </Text>
+              </View>
+              <View style={styles.premiumActiveBadge}>
+                <Text style={styles.premiumActiveBadgeText}>ACTIVE</Text>
+              </View>
+            </View>
+            <TouchableOpacity style={styles.managePlanButton} onPress={() => {
+              Alert.alert('Manage Subscription', 'Cancel your Premium subscription?', [
+                { text: 'Keep Premium', style: 'cancel' },
+                { text: 'Cancel', style: 'destructive', onPress: cancelSubscription },
+              ]);
+            }}>
+              <Text style={styles.managePlanText}>Manage Plan</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <TouchableOpacity style={styles.premiumUpgradeCard} onPress={() => navigation.navigate('Paywall')} activeOpacity={0.8}>
+            <View style={styles.premiumUpgradeRow}>
+              <View style={styles.premiumUpgradeIcon}>
+                <Ionicons name="diamond" size={28} color="#FFF" />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.premiumUpgradeTitle}>Upgrade to Pro</Text>
+                <Text style={styles.premiumUpgradeSubtitle}>Unlimited searches, price predictions, and more</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color="#FFF" />
+            </View>
+          </TouchableOpacity>
+        )}
+
+        {/* Dev Toggle */}
+        {__DEV__ && (
+          <TouchableOpacity style={styles.devToggle} onPress={toggleDevPremium}>
+            <Ionicons name="code-slash" size={14} color={Colors.warning} />
+            <Text style={styles.devToggleText}>Dev: {isPremium ? 'Switch to Free' : 'Toggle Premium'}</Text>
+          </TouchableOpacity>
+        )}
+
         {/* Stats Overview */}
         <View style={styles.statsCard}>
           <View style={styles.statItem}>
@@ -346,5 +398,105 @@ const styles = StyleSheet.create({
     fontSize: FontSizes.xs,
     color: Colors.textTertiary,
     marginTop: Spacing.xs,
+  },
+  premiumActiveCard: {
+    backgroundColor: Colors.premiumBg,
+    borderRadius: BorderRadius.xl,
+    padding: Spacing.lg,
+    marginBottom: Spacing.lg,
+    borderWidth: 1,
+    borderColor: Colors.premium + '30',
+  },
+  premiumActiveHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+  },
+  premiumIconCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: Colors.premium,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  premiumActiveTitle: {
+    fontSize: FontSizes.lg,
+    fontWeight: FontWeights.bold,
+    color: Colors.premium,
+  },
+  premiumActiveSubtitle: {
+    fontSize: FontSizes.xs,
+    color: Colors.textSecondary,
+    marginTop: 2,
+  },
+  premiumActiveBadge: {
+    backgroundColor: Colors.success,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.sm,
+  },
+  premiumActiveBadgeText: {
+    fontSize: 9,
+    fontWeight: FontWeights.bold,
+    color: '#FFF',
+    letterSpacing: 0.5,
+  },
+  managePlanButton: {
+    alignItems: 'center',
+    paddingVertical: Spacing.sm,
+    marginTop: Spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: Colors.premium + '20',
+  },
+  managePlanText: {
+    fontSize: FontSizes.sm,
+    fontWeight: FontWeights.semibold,
+    color: Colors.premium,
+  },
+  premiumUpgradeCard: {
+    backgroundColor: Colors.premium,
+    borderRadius: BorderRadius.xl,
+    padding: Spacing.lg,
+    marginBottom: Spacing.lg,
+    ...Shadows.md,
+  },
+  premiumUpgradeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+  },
+  premiumUpgradeIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  premiumUpgradeTitle: {
+    fontSize: FontSizes.lg,
+    fontWeight: FontWeights.bold,
+    color: '#FFF',
+  },
+  premiumUpgradeSubtitle: {
+    fontSize: FontSizes.xs,
+    color: 'rgba(255,255,255,0.8)',
+    marginTop: 2,
+  },
+  devToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: Spacing.sm,
+    marginBottom: Spacing.md,
+    backgroundColor: Colors.warningLight,
+    borderRadius: BorderRadius.md,
+    gap: Spacing.xs,
+  },
+  devToggleText: {
+    fontSize: FontSizes.xs,
+    fontWeight: FontWeights.semibold,
+    color: Colors.warning,
   },
 });

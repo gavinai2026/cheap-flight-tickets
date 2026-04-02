@@ -10,8 +10,10 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useApp } from '../context/AppContext';
+import { useSubscription } from '../context/SubscriptionContext';
 import { FlightCard } from '../components/FlightCard';
 import { Colors, Spacing, FontSizes, FontWeights, BorderRadius } from '../constants/theme';
+import { FREE_LIMITS } from '../types/subscription';
 import { SortOption } from '../types';
 import { searchFlights } from '../services/flightService';
 import { formatPrice, getCabinClassLabel } from '../utils/helpers';
@@ -33,6 +35,7 @@ const STOP_FILTERS = [
 
 export const ResultsScreen = ({ navigation, route }: any) => {
   const { state, dispatch, toggleFavorite, isFavorite } = useApp();
+  const { canViewFullResults } = useSubscription();
   const [sortModalVisible, setSortModalVisible] = useState(false);
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [maxStopsFilter, setMaxStopsFilter] = useState(-1);
@@ -182,7 +185,7 @@ export const ResultsScreen = ({ navigation, route }: any) => {
 
       {/* Results */}
       <FlatList
-        data={filteredAndSorted}
+        data={canViewFullResults() ? filteredAndSorted : filteredAndSorted.slice(0, FREE_LIMITS.maxResults)}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => (
@@ -193,6 +196,26 @@ export const ResultsScreen = ({ navigation, route }: any) => {
             isFavorite={isFavorite(item.id)}
           />
         )}
+        ListFooterComponent={
+          !canViewFullResults() && filteredAndSorted.length > FREE_LIMITS.maxResults ? (
+            <TouchableOpacity
+              style={styles.premiumUpsell}
+              onPress={() => navigation.navigate('Paywall')}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="diamond" size={20} color={Colors.premium} />
+              <Text style={styles.premiumUpsellTitle}>
+                See {filteredAndSorted.length - FREE_LIMITS.maxResults} more results
+              </Text>
+              <Text style={styles.premiumUpsellText}>
+                Upgrade to Premium for full search results
+              </Text>
+              <View style={styles.premiumUpsellButton}>
+                <Text style={styles.premiumUpsellButtonText}>Unlock All Results</Text>
+              </View>
+            </TouchableOpacity>
+          ) : null
+        }
         ListEmptyComponent={
           <View style={styles.emptyState}>
             <Ionicons name="airplane-outline" size={64} color={Colors.textTertiary} />
@@ -575,5 +598,38 @@ const styles = StyleSheet.create({
     fontSize: FontSizes.md,
     fontWeight: FontWeights.bold,
     color: Colors.textInverse,
+  },
+  premiumUpsell: {
+    alignItems: 'center',
+    backgroundColor: Colors.premiumBg,
+    borderRadius: BorderRadius.xl,
+    padding: Spacing.xl,
+    marginHorizontal: Spacing.lg,
+    marginTop: Spacing.md,
+    borderWidth: 1,
+    borderColor: Colors.premium + '30',
+  },
+  premiumUpsellTitle: {
+    fontSize: FontSizes.lg,
+    fontWeight: FontWeights.bold,
+    color: Colors.text,
+    marginTop: Spacing.sm,
+  },
+  premiumUpsellText: {
+    fontSize: FontSizes.sm,
+    color: Colors.textSecondary,
+    marginTop: 4,
+    marginBottom: Spacing.md,
+  },
+  premiumUpsellButton: {
+    backgroundColor: Colors.premium,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.lg,
+  },
+  premiumUpsellButtonText: {
+    fontSize: FontSizes.sm,
+    fontWeight: FontWeights.bold,
+    color: '#FFF',
   },
 });

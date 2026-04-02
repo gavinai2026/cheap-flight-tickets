@@ -24,6 +24,7 @@ import {
 import { PriceTrendChart } from '../components/PriceTrendChart';
 import { PredictionBadge } from '../components/PredictionBadge';
 import { MilesEstimateView } from '../components/MilesEstimate';
+import { PremiumGate } from '../components/PremiumGate';
 import { generatePriceHistory, predictPrice } from '../services/pricePrediction';
 import { calculateMiles } from '../services/milesCalculator';
 
@@ -197,55 +198,61 @@ export const FlightDetailsScreen = ({ navigation, route }: any) => {
         </View>
 
         {/* Price Prediction */}
-        <View style={styles.amenitiesCard}>
-          <Text style={styles.cardTitle}>Price Trend</Text>
-          <PriceTrendChart priceHistory={priceHistory} currentPrice={flight.price} />
-          <View style={{ marginTop: Spacing.md }}>
-            <PredictionBadge prediction={prediction} />
+        <PremiumGate feature="price_prediction" fallbackTitle="Price Trend & Prediction">
+          <View style={styles.amenitiesCard}>
+            <Text style={styles.cardTitle}>Price Trend</Text>
+            <PriceTrendChart priceHistory={priceHistory} currentPrice={flight.price} />
+            <View style={{ marginTop: Spacing.md }}>
+              <PredictionBadge prediction={prediction} />
+            </View>
           </View>
-        </View>
+        </PremiumGate>
 
         {/* Miles Estimate */}
-        <View style={styles.amenitiesCard}>
-          <Text style={styles.cardTitle}>Miles & Points</Text>
-          <MilesEstimateView estimate={milesEstimate} />
-        </View>
+        <PremiumGate feature="miles_calculator" fallbackTitle="Miles & Points Calculator">
+          <View style={styles.amenitiesCard}>
+            <Text style={styles.cardTitle}>Miles & Points</Text>
+            <MilesEstimateView estimate={milesEstimate} />
+          </View>
+        </PremiumGate>
 
         {/* Quick Links */}
-        <View style={styles.amenitiesCard}>
-          <Text style={styles.cardTitle}>Travel Tools</Text>
-          <View style={{ gap: Spacing.sm }}>
-            <TouchableOpacity
-              style={styles.toolLink}
-              onPress={() => navigation.navigate('Lounge', {
-                airportCode: flight.segments[0].departureAirport.code,
-                airportName: flight.segments[0].departureAirport.name,
-              })}
-            >
-              <Ionicons name="wine-outline" size={20} color={Colors.premium} />
-              <Text style={styles.toolLinkText}>View Lounges at {flight.segments[0].departureAirport.code}</Text>
-              <Ionicons name="chevron-forward" size={16} color={Colors.textTertiary} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.toolLink}
-              onPress={() => navigation.navigate('VisaCheck', {
-                destinationCountry: flight.segments[flight.segments.length - 1].arrivalAirport.country || '',
-              })}
-            >
-              <Ionicons name="document-text-outline" size={20} color={Colors.info} />
-              <Text style={styles.toolLinkText}>Check Visa Requirements</Text>
-              <Ionicons name="chevron-forward" size={16} color={Colors.textTertiary} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.toolLink}
-              onPress={() => navigation.navigate('Compare')}
-            >
-              <Ionicons name="git-compare-outline" size={20} color={Colors.secondary} />
-              <Text style={styles.toolLinkText}>Compare Business vs First</Text>
-              <Ionicons name="chevron-forward" size={16} color={Colors.textTertiary} />
-            </TouchableOpacity>
+        <PremiumGate feature="lounge_finder" fallbackTitle="Travel Tools">
+          <View style={styles.amenitiesCard}>
+            <Text style={styles.cardTitle}>Travel Tools</Text>
+            <View style={{ gap: Spacing.sm }}>
+              <TouchableOpacity
+                style={styles.toolLink}
+                onPress={() => navigation.navigate('Lounge', {
+                  airportCode: flight.segments[0].departureAirport.code,
+                  airportName: flight.segments[0].departureAirport.name,
+                })}
+              >
+                <Ionicons name="wine-outline" size={20} color={Colors.premium} />
+                <Text style={styles.toolLinkText}>View Lounges at {flight.segments[0].departureAirport.code}</Text>
+                <Ionicons name="chevron-forward" size={16} color={Colors.textTertiary} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.toolLink}
+                onPress={() => navigation.navigate('VisaCheck', {
+                  destinationCountry: flight.segments[flight.segments.length - 1].arrivalAirport.country || '',
+                })}
+              >
+                <Ionicons name="document-text-outline" size={20} color={Colors.info} />
+                <Text style={styles.toolLinkText}>Check Visa Requirements</Text>
+                <Ionicons name="chevron-forward" size={16} color={Colors.textTertiary} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.toolLink}
+                onPress={() => navigation.navigate('Compare')}
+              >
+                <Ionicons name="git-compare-outline" size={20} color={Colors.secondary} />
+                <Text style={styles.toolLinkText}>Compare Business vs First</Text>
+                <Ionicons name="chevron-forward" size={16} color={Colors.textTertiary} />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        </PremiumGate>
 
         {/* Fare Details */}
         <View style={styles.fareCard}>

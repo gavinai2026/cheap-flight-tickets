@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppProvider } from './src/context/AppContext';
 import { NetworkProvider } from './src/context/NetworkContext';
 import { TripProvider } from './src/context/TripContext';
+import { SubscriptionProvider } from './src/context/SubscriptionContext';
 import { ErrorBoundary } from './src/components/ErrorBoundary';
 import { OfflineBanner } from './src/components/OfflineBanner';
 import { UpdateBanner } from './src/components/UpdateBanner';
@@ -16,14 +17,16 @@ export default function App() {
       <SafeAreaProvider>
         <ErrorBoundary>
           <NetworkProvider>
-            <AppProvider>
-              <TripProvider>
+            <SubscriptionProvider>
+              <AppProvider>
+                <TripProvider>
                 <StatusBar style="auto" />
                 <UpdateBanner />
                 <OfflineBanner />
                 <AppNavigator />
-              </TripProvider>
-            </AppProvider>
+                </TripProvider>
+              </AppProvider>
+            </SubscriptionProvider>
           </NetworkProvider>
         </ErrorBoundary>
       </SafeAreaProvider>

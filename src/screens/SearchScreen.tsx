@@ -11,15 +11,19 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useApp } from '../context/AppContext';
+import { useSubscription } from '../context/SubscriptionContext';
 import { AirportSearch } from '../components/AirportSearch';
 import { DatePicker } from '../components/DatePicker';
 import { DealCard } from '../components/DealCard';
+import { UsageBanner } from '../components/UsageBanner';
+import { PremiumLock } from '../components/PremiumBadge';
 import { Colors, Spacing, FontSizes, FontWeights, BorderRadius, Shadows } from '../constants/theme';
 import { searchFlights, getDealsOfTheDay } from '../services/flightService';
 import { CabinClass, TripType } from '../types';
 
 export const SearchScreen = ({ navigation }: any) => {
   const { state, dispatch, updateSearch, swapAirports, setDeals } = useApp();
+  const { canSearch, incrementSearchCount, isPremium, canUsePremiumFeature } = useSubscription();
   const { searchQuery, deals } = state;
   const [loadingDeals, setLoadingDeals] = useState(true);
 
@@ -37,8 +41,14 @@ export const SearchScreen = ({ navigation }: any) => {
   const handleSearch = async () => {
     if (!searchQuery.origin || !searchQuery.destination) return;
 
+    if (!canSearch()) {
+      navigation.navigate('Paywall');
+      return;
+    }
+
     dispatch({ type: 'SET_IS_SEARCHING', payload: true });
     dispatch({ type: 'ADD_RECENT_SEARCH', payload: searchQuery });
+    incrementSearchCount();
 
     try {
       const results = await searchFlights(searchQuery);
@@ -265,6 +275,9 @@ export const SearchScreen = ({ navigation }: any) => {
           </TouchableOpacity>
         </View>
 
+        {/* Usage Banner for Free Users */}
+        <UsageBanner />
+
         {/* Quick Actions */}
         <View style={styles.quickActions}>
           <TouchableOpacity
@@ -278,21 +291,27 @@ export const SearchScreen = ({ navigation }: any) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.quickAction}
-            onPress={() => navigation.navigate('FlightTracker')}
+            onPress={() => canUsePremiumFeature('flight_tracker') ? navigation.navigate('FlightTracker') : navigation.navigate('Paywall')}
           >
             <View style={[styles.quickActionIcon, { backgroundColor: Colors.successLight }]}>
               <Ionicons name="locate" size={22} color={Colors.success} />
             </View>
-            <Text style={styles.quickActionText}>Track Flight</Text>
+            <View style={styles.quickActionLabelRow}>
+              <Text style={styles.quickActionText}>Track Flight</Text>
+              {!isPremium && <PremiumLock />}
+            </View>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.quickAction}
-            onPress={() => navigation.navigate('TripPlanner')}
+            onPress={() => canUsePremiumFeature('trip_planner') ? navigation.navigate('TripPlanner') : navigation.navigate('Paywall')}
           >
             <View style={[styles.quickActionIcon, { backgroundColor: Colors.warningLight }]}>
               <Ionicons name="map" size={22} color={Colors.warning} />
             </View>
-            <Text style={styles.quickActionText}>Trip Planner</Text>
+            <View style={styles.quickActionLabelRow}>
+              <Text style={styles.quickActionText}>Trip Planner</Text>
+              {!isPremium && <PremiumLock />}
+            </View>
           </TouchableOpacity>
         </View>
 
@@ -300,21 +319,27 @@ export const SearchScreen = ({ navigation }: any) => {
         <View style={styles.quickActions}>
           <TouchableOpacity
             style={styles.quickAction}
-            onPress={() => navigation.navigate('Compare')}
+            onPress={() => canUsePremiumFeature('cabin_compare') ? navigation.navigate('Compare') : navigation.navigate('Paywall')}
           >
             <View style={[styles.quickActionIcon, { backgroundColor: Colors.primaryLight + '30' }]}>
               <Ionicons name="git-compare" size={22} color={Colors.primary} />
             </View>
-            <Text style={styles.quickActionText}>Compare</Text>
+            <View style={styles.quickActionLabelRow}>
+              <Text style={styles.quickActionText}>Compare</Text>
+              {!isPremium && <PremiumLock />}
+            </View>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.quickAction}
-            onPress={() => navigation.navigate('VisaCheck')}
+            onPress={() => canUsePremiumFeature('visa_checker') ? navigation.navigate('VisaCheck') : navigation.navigate('Paywall')}
           >
             <View style={[styles.quickActionIcon, { backgroundColor: Colors.infoLight }]}>
               <Ionicons name="document-text" size={22} color={Colors.info} />
             </View>
-            <Text style={styles.quickActionText}>Visa Check</Text>
+            <View style={styles.quickActionLabelRow}>
+              <Text style={styles.quickActionText}>Visa Check</Text>
+              {!isPremium && <PremiumLock />}
+            </View>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.quickAction}
@@ -628,6 +653,11 @@ const styles = StyleSheet.create({
     fontSize: FontSizes.sm,
     fontWeight: FontWeights.medium,
     color: Colors.textSecondary,
+  },
+  quickActionLabelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
   dealsSection: {
     marginBottom: Spacing.xxl,

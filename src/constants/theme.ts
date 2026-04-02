@@ -40,6 +40,9 @@ export const Colors = {
   business: '#1A73E8',
   businessBg: '#E8F0FE',
 
+  premiumGradientStart: '#8B5CF6',
+  premiumGradientEnd: '#D4AF37',
+
   skeleton: '#E5E7EB',
   overlay: 'rgba(0, 0, 0, 0.5)',
   shadow: 'rgba(0, 0, 0, 0.1)',

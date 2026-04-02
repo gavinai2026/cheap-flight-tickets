@@ -18,6 +18,7 @@ import { FlightTrackerScreen } from '../screens/FlightTrackerScreen';
 import { VisaCheckScreen } from '../screens/VisaCheckScreen';
 import { LoungeScreen } from '../screens/LoungeScreen';
 import { TripPlannerScreen } from '../screens/TripPlannerScreen';
+import { PaywallScreen } from '../screens/PaywallScreen';
 import { Colors, FontSizes, FontWeights } from '../constants/theme';
 
 const Stack = createNativeStackNavigator();
@@ -35,6 +36,7 @@ const SearchStack = () => (
     <Stack.Screen name="VisaCheck" component={VisaCheckScreen} />
     <Stack.Screen name="Lounge" component={LoungeScreen} />
     <Stack.Screen name="TripPlanner" component={TripPlannerScreen} />
+    <Stack.Screen name="Paywall" component={PaywallScreen} options={{ presentation: 'modal' }} />
   </Stack.Navigator>
 );
 
@@ -53,6 +55,7 @@ const SavedStack = () => (
 const ProfileStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="ProfileMain" component={ProfileScreen} />
+    <Stack.Screen name="Paywall" component={PaywallScreen} options={{ presentation: 'modal' }} />
   </Stack.Navigator>
 );
 
