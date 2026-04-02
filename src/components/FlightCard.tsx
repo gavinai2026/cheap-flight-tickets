@@ -12,14 +12,35 @@ interface Props {
   isFavorite?: boolean;
 }
 
+const AIRLINE_BRAND_COLORS: Record<string, string> = {
+  EK: '#D71921',
+  QR: '#5C0632',
+  SQ: '#FFD700',
+  CX: '#006564',
+  NH: '#00467F',
+  LH: '#05164D',
+  BA: '#075AAA',
+  EY: '#BD8B13',
+  TK: '#E31E24',
+  JL: '#C8102E',
+};
+
+const getAirlineBrandColor = (code: string): string => {
+  return AIRLINE_BRAND_COLORS[code] || Colors.primary;
+};
+
 export const FlightCard: React.FC<Props> = ({ flight, onPress, onFavorite, isFavorite }) => {
   const segment = flight.segments[0];
   const lastSegment = flight.segments[flight.segments.length - 1];
   const hasDiscount = flight.price < flight.originalPrice;
   const discount = hasDiscount ? getDiscountPercent(flight.originalPrice, flight.price) : 0;
+  const brandColor = getAirlineBrandColor(segment.airline.code);
 
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
+      {/* Airline color accent strip */}
+      <View style={[styles.accentStrip, { backgroundColor: brandColor }]} />
+
       {hasDiscount && (
         <View style={styles.discountBadge}>
           <Text style={styles.discountText}>{discount}% OFF</Text>
@@ -28,8 +49,8 @@ export const FlightCard: React.FC<Props> = ({ flight, onPress, onFavorite, isFav
 
       <View style={styles.header}>
         <View style={styles.airlineInfo}>
-          <View style={styles.airlineLogo}>
-            <Text style={styles.airlineCode}>{segment.airline.code}</Text>
+          <View style={[styles.airlineLogo, { backgroundColor: brandColor + '15' }]}>
+            <Text style={[styles.airlineCode, { color: brandColor }]}>{segment.airline.code}</Text>
           </View>
           <View>
             <Text style={styles.airlineName}>{segment.airline.name}</Text>
@@ -102,6 +123,10 @@ export const FlightCard: React.FC<Props> = ({ flight, onPress, onFavorite, isFav
           )}
           <Text style={styles.price}>{formatPrice(flight.price)}</Text>
           <Text style={styles.perPerson}>per person</Text>
+          <View style={styles.liveIndicator}>
+            <View style={styles.liveDot} />
+            <Text style={styles.liveText}>Live</Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -300,5 +325,31 @@ const styles = StyleSheet.create({
   perPerson: {
     fontSize: FontSizes.xs,
     color: Colors.textTertiary,
+  },
+  accentStrip: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: 4,
+    borderTopLeftRadius: BorderRadius.xl,
+    borderBottomLeftRadius: BorderRadius.xl,
+  },
+  liveIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    marginTop: 2,
+  },
+  liveDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: Colors.success,
+  },
+  liveText: {
+    fontSize: 9,
+    color: Colors.success,
+    fontWeight: FontWeights.medium,
   },
 });

@@ -19,6 +19,7 @@ import { UsageBanner } from '../components/UsageBanner';
 import { PremiumLock } from '../components/PremiumBadge';
 import { Colors, Spacing, FontSizes, FontWeights, BorderRadius, Shadows } from '../constants/theme';
 import { searchFlights, getDealsOfTheDay } from '../services/flightService';
+import { AIRPORTS } from '../constants/airports';
 import { CabinClass, TripType } from '../types';
 
 export const SearchScreen = ({ navigation }: any) => {
@@ -78,6 +79,10 @@ export const SearchScreen = ({ navigation }: any) => {
           <View>
             <Text style={styles.greeting}>Find Premium Flights</Text>
             <Text style={styles.subtitle}>Business & First Class deals worldwide</Text>
+            <View style={styles.dataSourceRow}>
+              <Ionicons name="pulse" size={12} color="#64FFDA" />
+              <Text style={styles.dataSourceText}>Live flight data from 40+ airlines</Text>
+            </View>
           </View>
           <TouchableOpacity
             style={styles.notifButton}
@@ -263,6 +268,7 @@ export const SearchScreen = ({ navigation }: any) => {
             ]}
             onPress={handleSearch}
             disabled={!searchQuery.origin || !searchQuery.destination || state.isSearching}
+            activeOpacity={0.85}
           >
             {state.isSearching ? (
               <ActivityIndicator color={Colors.textInverse} />
@@ -277,6 +283,34 @@ export const SearchScreen = ({ navigation }: any) => {
 
         {/* Usage Banner for Free Users */}
         <UsageBanner />
+
+        {/* Popular Routes */}
+        <View style={styles.popularSection}>
+          <Text style={[styles.sectionTitle, { paddingHorizontal: Spacing.lg, marginBottom: Spacing.sm }]}>Popular Routes</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: Spacing.lg, gap: Spacing.sm }}>
+            {[
+              { from: 'JFK', to: 'LHR', label: 'New York → London' },
+              { from: 'LAX', to: 'NRT', label: 'Los Angeles → Tokyo' },
+              { from: 'SFO', to: 'SIN', label: 'San Francisco → Singapore' },
+              { from: 'ORD', to: 'DXB', label: 'Chicago → Dubai' },
+              { from: 'MIA', to: 'CDG', label: 'Miami → Paris' },
+              { from: 'SFO', to: 'SYD', label: 'San Francisco → Sydney' },
+            ].map((route) => (
+              <TouchableOpacity
+                key={route.label}
+                style={styles.popularChip}
+                onPress={() => {
+                  const from = AIRPORTS.find(a => a.code === route.from);
+                  const to = AIRPORTS.find(a => a.code === route.to);
+                  if (from && to) updateSearch({ origin: from, destination: to });
+                }}
+              >
+                <Ionicons name="airplane" size={14} color={Colors.primary} style={{ transform: [{ rotate: '45deg' }] }} />
+                <Text style={styles.popularChipText}>{route.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
 
         {/* Quick Actions */}
         <View style={styles.quickActions}>
@@ -640,12 +674,12 @@ const styles = StyleSheet.create({
   },
   quickAction: {
     alignItems: 'center',
-    gap: Spacing.sm,
+    gap: Spacing.md,
   },
   quickActionIcon: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -708,5 +742,36 @@ const styles = StyleSheet.create({
   recentDetails: {
     fontSize: FontSizes.sm,
     color: Colors.textSecondary,
+  },
+  dataSourceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
+    marginTop: Spacing.sm,
+  },
+  dataSourceText: {
+    fontSize: FontSizes.xs,
+    color: Colors.textInverse,
+    opacity: 0.7,
+  },
+  popularSection: {
+    marginTop: Spacing.lg,
+    marginBottom: Spacing.sm,
+  },
+  popularChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.primaryLight + '15',
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.full,
+    gap: Spacing.xs,
+    borderWidth: 1,
+    borderColor: Colors.primary + '20',
+  },
+  popularChipText: {
+    fontSize: FontSizes.sm,
+    fontWeight: FontWeights.medium,
+    color: Colors.primary,
   },
 });

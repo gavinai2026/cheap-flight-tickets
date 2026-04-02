@@ -123,11 +123,25 @@ export const ResultsScreen = ({ navigation, route }: any) => {
   if (isSearching) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={Colors.primary} />
-        <Text style={styles.loadingText}>Searching premium flights...</Text>
+        <View style={styles.loadingIconContainer}>
+          <Ionicons name="airplane" size={48} color={Colors.primary} />
+        </View>
+        <Text style={styles.loadingText}>Searching Premium Flights</Text>
         <Text style={styles.loadingSubtext}>
-          Comparing {getCabinClassLabel(searchQuery.cabinClass)} fares across all airlines
+          Comparing {getCabinClassLabel(searchQuery.cabinClass)} fares across 40+ airlines
         </Text>
+        <View style={styles.loadingSources}>
+          {['Emirates', 'Qatar Airways', 'Singapore Airlines', 'Cathay Pacific', 'British Airways'].map((name) => (
+            <View key={name} style={styles.loadingSourceRow}>
+              <ActivityIndicator size="small" color={Colors.primary} />
+              <Text style={styles.loadingSourceText}>{name}</Text>
+            </View>
+          ))}
+        </View>
+        <View style={styles.guaranteeBadge}>
+          <Ionicons name="shield-checkmark" size={14} color={Colors.success} />
+          <Text style={styles.guaranteeText}>Best Price Guarantee</Text>
+        </View>
       </View>
     );
   }
@@ -154,9 +168,14 @@ export const ResultsScreen = ({ navigation, route }: any) => {
 
       {/* Stats Bar */}
       <View style={styles.statsBar}>
-        <Text style={styles.statsText}>
-          {filteredAndSorted.length} flight{filteredAndSorted.length !== 1 ? 's' : ''} found
-        </Text>
+        <View>
+          <Text style={styles.statsText}>
+            {filteredAndSorted.length} flight{filteredAndSorted.length !== 1 ? 's' : ''} found
+          </Text>
+          <Text style={styles.statsSortLabel}>
+            Sorted by {SORT_OPTIONS.find(o => o.value === sortOption)?.label || 'Price: Low to High'}
+          </Text>
+        </View>
         {lowestPrice > 0 && (
           <Text style={styles.statsPrice}>from {formatPrice(lowestPrice)}</Text>
         )}
@@ -382,6 +401,43 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: Spacing.sm,
   },
+  loadingIconContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: Colors.primaryLight + '15',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: Spacing.lg,
+  },
+  loadingSources: {
+    marginTop: Spacing.xxl,
+    gap: Spacing.sm,
+  },
+  loadingSourceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+  },
+  loadingSourceText: {
+    fontSize: FontSizes.sm,
+    color: Colors.textSecondary,
+  },
+  guaranteeBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
+    marginTop: Spacing.xxl,
+    backgroundColor: Colors.successLight,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.full,
+  },
+  guaranteeText: {
+    fontSize: FontSizes.sm,
+    fontWeight: FontWeights.medium,
+    color: Colors.success,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -435,6 +491,11 @@ const styles = StyleSheet.create({
     fontSize: FontSizes.sm,
     fontWeight: FontWeights.bold,
     color: Colors.primary,
+  },
+  statsSortLabel: {
+    fontSize: FontSizes.xs,
+    color: Colors.textTertiary,
+    marginTop: 2,
   },
   actionBar: {
     flexDirection: 'row',

@@ -24,14 +24,26 @@ export const API_KEYS = {
   SENTRY_DSN: process.env.SENTRY_DSN || '',
 };
 
+export const isApiKeyConfigured = (key: string): boolean => {
+  return key !== '' && !key.startsWith('YOUR_');
+};
+
+// Use test environment for development, production for release
+const USE_TEST_ENV = __DEV__ || !isApiKeyConfigured(API_KEYS.AMADEUS_CLIENT_ID);
+
+const AMADEUS_HOST = USE_TEST_ENV ? 'https://test.api.amadeus.com' : 'https://api.amadeus.com';
+
 export const API_URLS = {
-  AMADEUS_AUTH: 'https://api.amadeus.com/v1/security/oauth2/token',
-  AMADEUS_BASE: 'https://api.amadeus.com',
+  AMADEUS_AUTH: `${AMADEUS_HOST}/v1/security/oauth2/token`,
+  AMADEUS_BASE: AMADEUS_HOST,
   SKYSCANNER_BASE: 'https://skyscanner-api.p.rapidapi.com',
   AVIATIONSTACK_BASE: 'https://api.aviationstack.com/v1',
   EXCHANGE_RATE_BASE: 'https://v6.exchangerate-api.com/v6',
 };
 
-export const isApiKeyConfigured = (key: string): boolean => {
-  return key !== '' && !key.startsWith('YOUR_');
+export const getDataSourceLabel = (): string => {
+  if (isApiKeyConfigured(API_KEYS.AMADEUS_CLIENT_ID)) {
+    return USE_TEST_ENV ? 'Amadeus Test' : 'Amadeus Live';
+  }
+  return 'Smart Routing Engine';
 };
