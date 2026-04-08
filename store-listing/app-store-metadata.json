@@ -1,0 +1,25 @@
+{
+  "ios": {
+    "appName": "PremiumFlights - Business & First",
+    "subtitle": "Cheap Business & First Class Deals",
+    "category": "Travel",
+    "secondaryCategory": "Finance",
+    "contentRating": "4+",
+    "description": "Find the cheapest Business and First Class airline tickets worldwide. PremiumFlights searches across all major airlines to bring you the best premium cabin deals — saving you thousands on luxury travel.\n\nWHY PREMIUM TRAVELERS LOVE US:\n\n• SEARCH ALL AIRLINES — Compare Business and First Class fares from Emirates, Singapore Airlines, Qatar Airways, Cathay Pacific, British Airways, Lufthansa, ANA, and 30+ more carriers worldwide.\n\n• REAL-TIME PRICE TRACKING — Get instant alerts when premium cabin prices drop on your favorite routes. Our smart prediction engine tells you whether to buy now or wait.\n\n• PRICE CALENDAR — See the cheapest days to fly at a glance. Flexible date search finds deals ±3 days from your preferred dates.\n\n• CABIN COMPARISON — Side-by-side Business vs First Class comparison showing price difference, amenities, seat type, baggage, and value score.\n\n• MILES & POINTS CALCULATOR — See how many frequent flyer miles you'll earn on each flight across 20+ loyalty programs.\n\n• AIRPORT LOUNGE FINDER — Discover premium lounges at your departure and layover airports with amenities, ratings, and access rules.\n\n• TRIP PLANNER — Organize your entire journey with flights, hotels, transport, and activities in a beautiful timeline view.\n\n• FLIGHT TRACKER — Real-time flight status with departure/arrival updates, gate information, delays, and live tracking.\n\n• VISA CHECKER — Instantly check visa requirements for your destination based on your passport nationality.\n\n• SMART ALERTS — Set price targets and get notified the moment fares drop below your budget.\n\n• OFFLINE MODE — Access your saved flights, trips, and recent searches even without internet.\n\nSave thousands on Business and First Class flights. Download PremiumFlights today and fly premium for less.",
+    "keywords": "cheap flights,business class,first class,airline tickets,flight deals,premium flights,flight search,price alerts,flight tracker,lounge finder,miles calculator,visa check,trip planner,fare compare,luxury travel",
+    "promotionalText": "New: Price prediction engine, trip planner, and real-time flight tracking!",
+    "supportUrl": "https://premiumflights.app/support",
+    "marketingUrl": "https://premiumflights.app",
+    "privacyPolicyUrl": "https://premiumflights.app/privacy"
+  },
+  "android": {
+    "appName": "PremiumFlights - Business & First Class Deals",
+    "shortDescription": "Find cheap Business & First Class airline tickets worldwide. Compare 30+ airlines, track prices, and save thousands.",
+    "fullDescription": "PremiumFlights helps you find the cheapest Business and First Class airline tickets from all major airlines worldwide. Compare prices, track deals, and save thousands on premium travel.\n\n★ SEARCH ALL AIRLINES\nCompare Business and First Class fares from Emirates, Singapore Airlines, Qatar Airways, Cathay Pacific, British Airways, Lufthansa, ANA, and 30+ more carriers.\n\n★ SMART PRICE TRACKING\nGet instant alerts when prices drop. Our prediction engine analyzes trends and tells you whether to buy now or wait for a better deal.\n\n★ PRICE CALENDAR\nSee the cheapest days to fly at a glance with our color-coded price calendar. Flexible date search finds deals ±3 days.\n\n★ CABIN COMPARISON\nSide-by-side Business vs First Class comparison with price, amenities, seats, and value analysis.\n\n★ MILES & POINTS CALCULATOR\nSee how many frequent flyer miles you'll earn across 20+ loyalty programs including Emirates Skywards, Singapore KrisFlyer, and more.\n\n★ AIRPORT LOUNGES\nDiscover premium lounges at your airports with ratings, amenities, and access rules.\n\n★ TRIP PLANNER\nOrganize flights, hotels, transport, and activities in a beautiful timeline with budget tracking.\n\n★ LIVE FLIGHT TRACKER\nReal-time status, gate info, delays, altitude, and speed for any flight.\n\n★ VISA CHECKER\nInstantly check visa requirements based on your passport.\n\n★ OFFLINE MODE\nAccess saved flights and recent searches without internet.\n\nDownload now and start saving on Business and First Class flights!",
+    "category": "TRAVEL_AND_LOCAL",
+    "contentRating": "Everyone",
+    "contactEmail": "support@premiumflights.app",
+    "contactWebsite": "https://premiumflights.app",
+    "privacyPolicyUrl": "https://premiumflights.app/privacy"
+  }
+}
