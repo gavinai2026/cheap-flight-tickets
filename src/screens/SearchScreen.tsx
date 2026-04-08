@@ -353,10 +353,19 @@ export const SearchScreen = ({ navigation }: any) => {
         <View style={styles.quickActions}>
           <TouchableOpacity
             style={styles.quickAction}
-            onPress={() => canUsePremiumFeature('cabin_compare') ? navigation.navigate('Compare') : navigation.navigate('Paywall')}
+            onPress={() => navigation.navigate('FlightLookup')}
           >
             <View style={[styles.quickActionIcon, { backgroundColor: Colors.primaryLight + '30' }]}>
-              <Ionicons name="git-compare" size={22} color={Colors.primary} />
+              <Ionicons name="scan" size={22} color={Colors.primary} />
+            </View>
+            <Text style={styles.quickActionText}>Flight Lookup</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.quickAction}
+            onPress={() => canUsePremiumFeature('cabin_compare') ? navigation.navigate('Compare') : navigation.navigate('Paywall')}
+          >
+            <View style={[styles.quickActionIcon, { backgroundColor: Colors.dealBg }]}>
+              <Ionicons name="git-compare" size={22} color={Colors.deal} />
             </View>
             <View style={styles.quickActionLabelRow}>
               <Text style={styles.quickActionText}>Compare</Text>
@@ -375,6 +384,10 @@ export const SearchScreen = ({ navigation }: any) => {
               {!isPremium && <PremiumLock />}
             </View>
           </TouchableOpacity>
+        </View>
+
+        {/* Even More Tools */}
+        <View style={styles.quickActions}>
           <TouchableOpacity
             style={styles.quickAction}
             onPress={() => navigation.navigate('Alerts')}
@@ -384,6 +397,16 @@ export const SearchScreen = ({ navigation }: any) => {
             </View>
             <Text style={styles.quickActionText}>Price Alerts</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.quickAction}
+            onPress={() => navigation.navigate('FlightStats')}
+          >
+            <View style={[styles.quickActionIcon, { backgroundColor: Colors.premiumBg }]}>
+              <Ionicons name="stats-chart" size={22} color={Colors.premium} />
+            </View>
+            <Text style={styles.quickActionText}>My Stats</Text>
+          </TouchableOpacity>
+          <View style={styles.quickAction} />
         </View>
 
         {/* Deals Section */}

@@ -19,6 +19,8 @@ import { VisaCheckScreen } from '../screens/VisaCheckScreen';
 import { LoungeScreen } from '../screens/LoungeScreen';
 import { TripPlannerScreen } from '../screens/TripPlannerScreen';
 import { PaywallScreen } from '../screens/PaywallScreen';
+import { FlightStatsScreen } from '../screens/FlightStatsScreen';
+import { FlightLookupScreen } from '../screens/FlightLookupScreen';
 import { Colors, FontSizes, FontWeights } from '../constants/theme';
 
 const Stack = createNativeStackNavigator();
@@ -36,6 +38,8 @@ const SearchStack = () => (
     <Stack.Screen name="VisaCheck" component={VisaCheckScreen} />
     <Stack.Screen name="Lounge" component={LoungeScreen} />
     <Stack.Screen name="TripPlanner" component={TripPlannerScreen} />
+    <Stack.Screen name="FlightLookup" component={FlightLookupScreen} />
+    <Stack.Screen name="FlightStats" component={FlightStatsScreen} />
     <Stack.Screen name="Paywall" component={PaywallScreen} options={{ presentation: 'modal' }} />
   </Stack.Navigator>
 );
@@ -49,6 +53,14 @@ const DealsStack = () => (
 const SavedStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="SavedMain" component={SavedScreen} />
+  </Stack.Navigator>
+);
+
+const StatsStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="StatsMain" component={FlightStatsScreen} />
+    <Stack.Screen name="FlightLookup" component={FlightLookupScreen} />
+    <Stack.Screen name="FlightDetails" component={FlightDetailsScreen} />
   </Stack.Navigator>
 );
 
@@ -71,6 +83,9 @@ const getTabBarIcon = (routeName: string, focused: boolean, color: string, size:
       break;
     case 'SavedTab':
       iconName = focused ? 'heart' : 'heart-outline';
+      break;
+    case 'StatsTab':
+      iconName = focused ? 'stats-chart' : 'stats-chart-outline';
       break;
     case 'ProfileTab':
       iconName = focused ? 'person' : 'person-outline';
@@ -107,6 +122,7 @@ export const AppNavigator = () => (
       <Tab.Screen name="SearchTab" component={SearchStack} options={{ tabBarLabel: 'Search' }} />
       <Tab.Screen name="DealsTab" component={DealsStack} options={{ tabBarLabel: 'Deals' }} />
       <Tab.Screen name="SavedTab" component={SavedStack} options={{ tabBarLabel: 'Saved' }} />
+      <Tab.Screen name="StatsTab" component={StatsStack} options={{ tabBarLabel: 'Stats' }} />
       <Tab.Screen name="ProfileTab" component={ProfileStack} options={{ tabBarLabel: 'Settings' }} />
     </Tab.Navigator>
   </NavigationContainer>

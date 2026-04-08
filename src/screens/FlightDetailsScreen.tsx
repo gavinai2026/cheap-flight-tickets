@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Share } from 'react-native';
 import { Flight } from '../types';
 import { useApp } from '../context/AppContext';
+import { exportFlightToCalendar } from '../services/icalExport';
 import { Colors, Spacing, FontSizes, FontWeights, BorderRadius, Shadows } from '../constants/theme';
 import {
   formatPrice,
@@ -324,7 +325,9 @@ export const FlightDetailsScreen = ({ navigation, route }: any) => {
       <View style={styles.bottomBar}>
         <TouchableOpacity style={styles.alertButton} onPress={handleSetAlert}>
           <Ionicons name="notifications-outline" size={20} color={Colors.primary} />
-          <Text style={styles.alertButtonText}>Price Alert</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.alertButton} onPress={() => exportFlightToCalendar(flight)}>
+          <Ionicons name="calendar-outline" size={20} color={Colors.primary} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.bookButton}>
           <Text style={styles.bookButtonText}>
